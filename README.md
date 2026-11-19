@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# JFunnel — Client Campaign Workspace
 
-## Getting Started
+JFunnel helps SMEs and one-person companies turn what they sell into a clear
+offer and a **coordinated marketing campaign** — without them having to figure
+out AI or marketing tooling themselves.
 
-First, run the development server:
+This repo is the **client-facing workspace** (MVP scaffold): the business owner
+sees progress, approves work, and tracks inquiries. A JFunnel operator prepares
+the actual work behind the scenes (in the hackathon demo, using
+[QwenWork](https://luma.com/kxld1xck) — stated as a manual handoff, not an
+automated integration).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## The journey this demo shows
+
+```text
+Business owner submits a brief
+  → confirms JFunnel's plain-words summary (source of truth)
+  → approves a brand direction (with a v2 revision loop)
+  → approves the campaign kit (landing page, 3 social posts, follow-up message)
+  → the landing page preview collects a real test inquiry
+  → owner reviews the AI-drafted follow-up reply and marks it replied
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Example client: **Blue Current Diving**, a fictional freelance dive instructor
+promoting one overseas dive trip (Anilao, March 2027).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Screens
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Route | Screen |
+|---|---|
+| `/` | 0 · Home — four-stage stepper + next action |
+| `/brief` | 1.1 · Intake form (with "fill with example" for the demo) |
+| `/brief/confirm` | 1.2 · Plain-words summary, edit, confirm |
+| `/brand` | 2.1 · Brand direction review — approve / request changes, v2 loop |
+| `/campaign` | 3.1 · Campaign kit — per-asset approval, "nothing publishes until all approved" |
+| `/campaign/preview` | 3.2 · Landing page preview with a working inquiry form |
+| `/inquiries` | 4.1 · Inquiry list |
+| `/inquiries/[id]` | 4.2 · Inquiry detail with editable suggested reply |
 
-## Learn More
+## Stack & MVP boundaries
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4
+- State lives in a React context (`src/lib/store.tsx`) seeded from
+  `src/lib/seed.ts` — **in-memory only, resets on reload** (good for demos).
+- No database, no auth yet: clients get a private link per campaign.
+- Honest demo labels: revision handoffs and sending follow-ups are operator
+  steps, shown as "demo controls", not faked automation.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Run it
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm install
+npm run dev
+# open http://localhost:3000
+```
 
-## Deploy on Vercel
+## Next steps (not built yet)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Persist state (Postgres via Drizzle) so refreshes survive.
+2. Operator view for preparing/revising brief→brand→kit content.
+3. Publish approved landing pages as real client URLs.
